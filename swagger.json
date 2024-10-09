@@ -1,0 +1,80 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Task-Management-API-with-Authentication",
+    "description": "Documentation for the Task Management API with authentication",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "description": "Route to register a new user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" }
+                },
+                "example": {
+                  "username": "john_doe",
+                  "email": "john.doe@example.com",
+                  "password": "strongpassword",
+                  "confirmPassword": "strongpassword"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created" },
+          "400": { "description": "username already exists" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Route to log in a user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "example": {
+                  "email": "john.doe@example.com",
+                  "password": "strongpassword"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authenticated user" },
+          "400": { "description": "Invalid password" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  }
+}
