@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests",
+
     "build": "tsc",
     "start": "node dist/server.js",
-    "server": "tsx watch src/server.ts"
+    "server": "tsx watch src/server.ts",
+    "seed": "tsx prisma/seed.ts"
+
   },
   "keywords": [],
   "author": "",
