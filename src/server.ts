@@ -3,8 +3,8 @@ import * as dotenv  from "dotenv"
 import cors from "cors"
 import  swaggerUI from "swagger-ui-express"
 import swaggerDocument from "../swagger.json"
+import { userRoute } from "./routes/userRoute"
 
-import { authRoute } from "./routes/authRoute"
 
 
 dotenv.config()
@@ -15,9 +15,9 @@ const port =  process.env.PORT||3000
 app.use( express.json())
 app.use(cors())
 app.use(urlencoded({extended:true}))
+app.use("/users",userRoute)
 
 
-app.use('/auth',authRoute);
 
 app.use('/docs',swaggerUI.serve,swaggerUI.setup(swaggerDocument) )
 

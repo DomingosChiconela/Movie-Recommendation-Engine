@@ -17,10 +17,8 @@ model User {
   id        String            @id @default(uuid())
   username String             @unique
   email     String            @unique
-  password  String
-  role     String            @default("USER")
-  UserGender UserGender[]
-  UserFavoriteMovie UserFavoriteMovie []
+  genders   Gender[]       @relation("UserFavoriteGenders") 
+  movies   Movie[]         @relation("UserFavoriteMovies") 
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 
@@ -29,31 +27,19 @@ model User {
 
 
 model Gender {
-  id        String            @id @default(uuid())
+  id        String        @id @default(uuid())
   name String             @unique
-  UserGender UserGender[]
-  MovieGender MovieGender[]
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  users     User[]        @relation("UserFavoriteGenders") 
+  movies  Movie[]         @relation("MovieGenders") 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
-  @@map("Genres")
-
-}
-
-
-model UserGender{
-  id        String            @id @default(uuid())
-  user User  @relation(fields: [userId], references: [id])
-  userId      String
-  gender Gender  @relation(fields: [genderId], references: [id])
-  genderId      String
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  @@map("UserGenres")
-
+  @@map("Genders")
 
 }
+
+
+
 
 
 model Movie{
@@ -61,8 +47,8 @@ model Movie{
   title  String
   description String
   release_year DateTime
-  MovieGender MovieGender[]
-  UserFavoriteMovie UserFavoriteMovie []
+  gender  Gender[]         @relation("MovieGenders") 
+  users     User[]        @relation("UserFavoriteMovies") 
   like_count Int @default(0)
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
@@ -71,32 +57,7 @@ model Movie{
 }
 
 
-model MovieGender{
-  id        String            @id @default(uuid())
-  movie Movie  @relation(fields: [movieId], references: [id])
-  movieId      String
-  gender Gender  @relation(fields: [genderId], references: [id])
-  genderId      String
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  @@map("MovieGenres")
 
 
-}
-
-model UserFavoriteMovie{
-  id        String            @id @default(uuid())
-  user User  @relation(fields: [userId], references: [id])
-  userId      String
-  movie Movie  @relation(fields: [movieId], references: [id])
-  movieId      String
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  @@map("UserFavoriteMovies")
-
-
-}
     
 
