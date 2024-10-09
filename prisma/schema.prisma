@@ -9,6 +9,94 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
+
+model User {
+  id        String            @id @default(uuid())
+  username String             @unique
+  email     String            @unique
+  password  String
+  role     String            @default("USER")
+  UserGender UserGender[]
+  UserFavoriteMovie UserFavoriteMovie []
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("users")
+}
+
+
+model Gender {
+  id        String            @id @default(uuid())
+  name String             @unique
+  UserGender UserGender[]
+  MovieGender MovieGender[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("Genres")
+
+}
+
+
+model UserGender{
+  id        String            @id @default(uuid())
+  user User  @relation(fields: [userId], references: [id])
+  userId      String
+  gender Gender  @relation(fields: [genderId], references: [id])
+  genderId      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("UserGenres")
+
+
+}
+
+
+model Movie{
+  id        String            @id @default(uuid())
+  title  String
+  description String
+  release_year DateTime
+  MovieGender MovieGender[]
+  UserFavoriteMovie UserFavoriteMovie []
+  like_count Int @default(0)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+   @@map("Movies")
+
+}
+
+
+model MovieGender{
+  id        String            @id @default(uuid())
+  movie Movie  @relation(fields: [movieId], references: [id])
+  movieId      String
+  gender Gender  @relation(fields: [genderId], references: [id])
+  genderId      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("MovieGenres")
+
+
+}
+
+model UserFavoriteMovie{
+  id        String            @id @default(uuid())
+  user User  @relation(fields: [userId], references: [id])
+  userId      String
+  movie Movie  @relation(fields: [movieId], references: [id])
+  movieId      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("UserFavoriteMovies")
+
+
+}
+    
+
