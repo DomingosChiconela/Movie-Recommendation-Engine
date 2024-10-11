@@ -5,10 +5,20 @@
     "description": "API for a movie recommendation engine that suggests movies based on user preferences using collaborative filtering.",
     "version": "1.0.0"
   },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+
   "paths": {
-    "/users": {
+    "/users/": {
       "post": {
-        "description": "Register a new user with a unique ID and a list of favorite movie genres.",
+        "description": "Register a new user ",
         "tags": ["User"],
         "requestBody": {
           "content": {
@@ -18,8 +28,101 @@
                 "properties": {
                   "username": { "type": "string" },
                   "email": { "type": "string" },
+                  "favoriteGenres": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "ACTION",
+                        "ADVENTURE",
+                        "COMEDY",
+                        "DRAMA",
+                        "HORROR",
+                        "SCIFI",
+                        "ROMANCE",
+                        "DOCUMENTARY",
+                        "ANIMATION",
+                        "FANTASY",
+                        "THRILLER",
+                        "MYSTERY",
+                        "MUSICAL",
+                        "BIOGRAPHY",
+                        "HISTORICAL",
+                        "SPORT",
+                        "WAR",
+                        "WESTERN",
+                        "FAMILY",
+                        "CRIME",
+                        "NOIR",
+                        "SUPERHERO"
+                      ]
+                    }
+                  },
                   "password": { "type": "string" },
-                  "genders": {
+                  "confirmPassword": { "type": "string" }
+                },
+                "required": ["username", "email", "password", "genders"],
+                "example": {
+                  "username": "john_doe",
+                  "email": "john.doe@example.com",
+                  "favoriteGenres": ["ACTION","ADVENTURE","COMEDY","DRAMA","HORROR","SCIFI","ROMANCE","DOCUMENTARY","ANIMATION","FANTASY","THRILLER","MYSTERY","MUSICAL","BIOGRAPHY","HISTORICAL","SPORT","WAR","WESTERN","FAMILY","CRIME","NOIR","SUPERHERO"],
+                  "password": "strongpassword",
+                  "confirmPassword": "strongpassword"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "400": { "description": "Invalid data or missing fields" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "description": "Route to log in a user",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "example": {
+                  "username": "john_doe",
+                  "password": "strongpassword"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authenticated user" },
+          "400": { "description": "Invalid password" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/users":{
+      "put": {
+        "description": "Endpoit to update user",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "favoriteGenres": {
                     "type": "array",
                     "items": {
                       "type": "string",
@@ -50,23 +153,34 @@
                     }
                   }
                 },
-                "required": ["username", "email", "password", "genders"],
+                "required": ["username", "email", "genders"],
                 "example": {
                   "username": "john_doe",
                   "email": "john.doe@example.com",
-                  "password": "securepassword123",
-                  "genders": ["ACTION", "COMEDY"]
+                  "favoriteGenres": ["ACTION","ADVENTURE","COMEDY","DRAMA","HORROR","SCIFI","ROMANCE","DOCUMENTARY","ANIMATION","FANTASY","THRILLER","MYSTERY","MUSICAL","BIOGRAPHY","HISTORICAL","SPORT","WAR","WESTERN","FAMILY","CRIME","NOIR","SUPERHERO"]
                 }
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "User created successfully" },
+          "200": { "description": "User updated" },
           "400": { "description": "Invalid data or missing fields" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "get":{
+        "description": "Endpoit to get user",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User found" },
+          "404": { "description": "User not found" },
           "500": { "description": "Internal Server Error" }
         }
       }
     }
+    
+    
   }
 }

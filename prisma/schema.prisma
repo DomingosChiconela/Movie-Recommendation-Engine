@@ -17,6 +17,7 @@ model User {
   id        String            @id @default(uuid())
   username String             @unique
   email     String            @unique
+  password String
   genders   Gender[]       @relation("UserFavoriteGenders") 
   movies   Movie[]         @relation("UserFavoriteMovies") 
   createdAt DateTime          @default(now())
