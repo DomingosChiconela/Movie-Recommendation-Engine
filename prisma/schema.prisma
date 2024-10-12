@@ -48,7 +48,7 @@ model Movie{
   title  String
   description String
   release_year DateTime
-  gender  Gender[]         @relation("MovieGenders") 
+  genders  Gender[]         @relation("MovieGenders") 
   users     User[]        @relation("UserFavoriteMovies") 
   like_count Int @default(0)
   createdAt DateTime          @default(now())

@@ -9,11 +9,12 @@ import * as jwt from "jsonwebtoken"
 ;
 import { encryptPassword,checkPassword } from "../utils/cryptPassword";
 
+
 const secret  =  process.env.SECRET as string
 
 
 
-const MovieGenreEnum = z.enum([
+export const MovieGenreEnum = z.enum([
     "ACTION",
     "ADVENTURE",
     "COMEDY",
@@ -70,7 +71,7 @@ export const register = async(req:Request,res:Response)=>{
     try {
         
         const validation = registerSchema.safeParse(req.body);
-        console.log(req.body)
+       
         if(!validation.success){
             return  res.status(400).json({message:fromZodError(validation.error).details})
         }

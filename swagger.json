@@ -189,7 +189,55 @@
           "500": { "description": "Internal Server Error" }
         }
       }
+    },
+    
+    "/movies": {
+        "post": {
+          "description": "Route to create a movie",
+          "tags": ["Movie"],
+          "security": [{ "bearerAuth": [] }],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "description": { "type": "string" },
+                    "release_year": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "genders": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": ["ACTION", "COMEDY", "DRAMA"]
+                      },
+                      "description": "At least one genre must be selected"
+                    }
+                  },
+                  "required": ["title", "description", "release_year", "genders"],
+                  "example": {
+                    "title": "Inception",
+                    "description": "A skilled thief is offered a chance to erase his past crimes by planting an idea in someone's mind.",
+                    "release_year": "2010-07-16T00:00:00Z",
+                    "genders": ["ACTION", "DRAMA"]
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Movie created " },
+            "400": { "description": "Invalid data or missing fields" },
+            "401": { "description": "Token not provided" },
+            "500": { "description": "Internal Server Error" }
+          }
+        }
     }
+    
+    
     
     
   }

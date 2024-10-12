@@ -4,6 +4,7 @@ import cors from "cors"
 import  swaggerUI from "swagger-ui-express"
 import swaggerDocument from "../swagger.json"
 import { userRoute } from "./routes/userRoute"
+import { movieRoute } from "./routes/movieRoute"
 
 
 
@@ -16,6 +17,7 @@ app.use( express.json())
 app.use(cors())
 app.use(urlencoded({extended:true}))
 app.use("/users",userRoute)
+app.use("/movies",movieRoute)
 
 
 
