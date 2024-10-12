@@ -4,6 +4,7 @@ import { fromZodError } from "zod-validation-error"
 
 import { db } from "../utils/db.server";
 import {MovieGenreEnum} from"./userController"
+import { json } from "stream/consumers";
 
 
 
@@ -75,4 +76,114 @@ export  const createMovie = async(req:Request,res:Response)=>{
 
 
 
+}
+
+
+
+export const    getAllMovies =  async (req:Request, res:Response)=>{
+
+
+    try{
+
+        const movies = await db.movie.findMany({
+            include:{
+                genders:true
+            }
+        });
+
+        if (movies.length === 0) {
+            return res.status(200).json({ message: "No movies found" });
+        }
+      const data = movies.map((movie)=>{
+
+            return { 
+            id:movie.id,
+            title:movie.title,
+            description:movie.description,
+            like_count: movie.like_count,
+            genders:movie.genders.map((gender)=>gender.name)
+
+            }
+            
+        })
+        
+       return res.status(200).json({ message: "Movies found", data});
+        
+
+    }catch (error) {
+
+
+        console.log(error)
+        
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+
+}
+
+
+export const getMovie =  async (req:Request, res:Response)=>{
+
+            const {id} =  req.params
+    try{
+
+        const movie = await db.movie.findUnique({
+            where:{
+                id
+            },
+            include:{
+                genders:true
+            }
+        });
+
+        if (!movie) {
+            return res.status(404).json({ message: "movie not found" });
+        }
+        
+        const  {genders,createdAt,updatedAt,...rest} = movie
+        const Genders =  genders.map((gender)=>gender.name)
+
+       return res.status(200).json({ message: "Movie found", data: {...rest,genders:Genders,createdAt,updatedAt}});
+        
+
+    }catch (error) {
+
+
+        console.log(error)
+        
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+
+
+}
+
+
+
+export const deleteMovie = async(req:Request,res:Response)=>{
+    const {id}= req.params
+
+    try{
+        const  user = await  db.movie.delete({
+            where:{
+                id
+            }
+        })
+
+        if(!user){
+            return  res.status(404).json({message:"movie not found"})
+
+        }
+        
+       
+
+        res.status(200).json({message:"movie deleted"})
+     
+
+    }
+    catch (error) {
+        console.log(error)
+        
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+  
 }

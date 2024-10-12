@@ -190,7 +190,6 @@
         }
       }
     },
-    
     "/movies": {
         "post": {
           "description": "Route to create a movie",
@@ -234,11 +233,61 @@
             "401": { "description": "Token not provided" },
             "500": { "description": "Internal Server Error" }
           }
+        },
+       "get": {
+        "description": "Route to get all movies",
+        "tags": ["Movie"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Movies found" },
+          "401": { "description": "Token not provided" },
+          "500": { "description": "Internal Server Error" }
         }
+      }
+    },
+    "/movies/{id}":{
+      "get": {
+        "description": "Route to get a specific movie",
+        "tags": ["Movie"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to get",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Movie found" },
+          "401": { "description": "Token not provided" },
+          "404": { "description": "Movie not found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+      ,
+      "delete": {
+        "description": "Route to delete a specific movie",
+        "tags": ["Movie"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to delete",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Movie deleted " },
+          "401": { "description": "Token not provided" },
+          "404": { "description": "Movie not found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
     }
-    
-    
-    
     
   }
 }
