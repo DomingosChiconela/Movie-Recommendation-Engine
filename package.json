@@ -8,8 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "server": "tsx watch src/server.ts",
-     "seed": "node dist/prisma/seed.js"
- 
+    "seed": "tsx prisma/seed.ts"
 
   },
   "keywords": [],
