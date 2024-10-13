@@ -287,7 +287,72 @@
           "500": { "description": "Internal Server Error" }
         }
       }
+    },
+    "/movies/likemovie/{id}":{
+      "post": {
+        "description": "Route to like a specific movie",
+        "tags": ["Movie"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to like",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Movie liked" },
+          "401": { "description": "Token not provided" },
+          "404": { "description": "Movie not found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+
+    },
+   "/recommendations/{userId}": {
+  "get": {
+    "description": "Route to get movie recommendations for a specific user",
+    "tags": ["Recommendations"],
+    "security": [{ "bearerAuth": [] }],
+    "parameters": [
+      {
+        "name": "userId",
+        "in": "path",
+        "required": true,
+        "description": "ID of the user to get recommendations for",
+        "schema": { "type": "string" }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Movie recommendations found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "movieId": { "type": "string" },
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "release_year": { "type": "string", "format": "date" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": { "description": "Token not provided" },
+      "404": { "description": "User not found" },
+      "500": { "description": "Internal Server Error" }
     }
+  }
+}
+
+
     
   }
 }

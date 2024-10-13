@@ -4,7 +4,7 @@ import { fromZodError } from "zod-validation-error"
 
 import { db } from "../utils/db.server";
 import {MovieGenreEnum} from"./userController"
-import { json } from "stream/consumers";
+
 
 
 
@@ -186,4 +186,49 @@ export const deleteMovie = async(req:Request,res:Response)=>{
         return res.status(500).json({ message: "Internal Server Error" });
     }
   
+}
+
+
+export const likeMovie = async(req:Request,res:Response)=>{
+        const {userId} =  req
+
+        const {id} =  req.params
+
+        try{
+
+    
+            const existingMovie  = await  db.movie.findUnique({
+                where:{
+                    id
+                }
+            })
+
+            if(!existingMovie){
+
+                return res.status(404).json({message:"movie not found"})
+            }
+
+            const movie =  await db.movie.update({
+                where:{
+                    id
+                },
+                data:{
+                
+                    users:{
+                        connect:{id:userId}
+                    },
+                    like_count:{
+                        increment:1,
+                    } 
+                }
+            })
+
+
+        return res.status(200).json({message:"movie liked"})
+        }
+        catch (error) {
+            console.log(error)
+            
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
 }
