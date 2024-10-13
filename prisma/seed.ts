@@ -30,11 +30,12 @@ const main = async () => {
 
  
   await Promise.all(
-    genres.map((name) => 
-      db.gender.create({
-        data: { name },
-      })
-    )
+    genres.map(async (name) => {
+      const existing = await db.gender.findUnique({ where: { name } });
+      if (!existing) {
+        return db.gender.create({ data: { name } });
+      }
+    })
   );
 
   console.log("Genres seeded successfully.");
